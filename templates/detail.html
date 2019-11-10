@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="shdw container jumbotron">
+  <div class="row">
+      {% if request.path == 'http://127.0.0.1:8000/1/vote/' %}
+    <img  class="col-lg-6" src="../../media/{{ post.image }}" width="100%">
+      {% else %}
+      <img  class="col-lg-6" src="../media/{{ post.image }}" width="" style="height: 120%;">
+      {% endif %}
+    <div class="col-lg-6">
+    <h2>{{ post.title }}</h2>
+    <p>{{ post.text }}</p>
+<!--    <a href="#" class="shdw btn btn-light" style="background: #ffffff; margin-top: 5%"><img src="thumb_up-24px.svg" width="32">  <b class="counter">21</b></a>-->
+
+<!--    <a href="#" class="shdw btn btn-light" style="background: #ffffff; margin-left: 8px;margin-top: 5%"><img src="thumb_down-24px.svg" width="32"><b class="counter">42</b></a>-->
+
+    </div>
+  </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+
+{% if user.is_authenticated %}
+<h1 style="margin-left: 20%;">{{ post.poll.question }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+<div class="shdw container" style="margin-left: 20%; width: 100%;" >
+  <form action="{% url 'citizenopinion:vote' post.poll.id %}" method="post">
+  {% csrf_token %}
+  {% for choice in post.poll.choice_set.all %}
+     <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+     <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br />
+  {% endfor %}
+  <input class="btn bnt-dark" type="submit" value="Проголосовать" />
+  </form>
+  <br>
+    
+</div>
+  <br>
+  <br>
+  <br>
+  <br>
+{% else %}
+<div class="container">
+
+    <div class="shdw card" style="width:100%; margin-left: ;">
+        <h1 style="padding-left: 40px; margin-left: 2px;">{{ post.poll.question }}</h1>
+        <ul class="counter " style="list-style-type:none; font-family:  sans-serif;">
+        {% for choice in post.poll.choice_set.all %}
+            <li>{{ choice.choice_text }} (Количество проголосовавших: {{ choice.votes_count }})</li>
+
+        {% endfor %}
+        </ul>
+</div>
+</div>
+<br>
+<br>
+<br>
+<br>
+{% endif %}
+
+{% endblock %}

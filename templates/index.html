@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if posts %}
+{% for post in posts %}
+<div class="container">
+  <div class="row">
+  <div class="col-lg-2"></div>
+  <div class="col-lg-8 " style="">
+    <a style="color: #3f51b5;text-decoration: none;" href="{% url 'citizenopinion:detail' post.id %}"><h2>{{ post.title }}</h2></a>
+    <div class="shdw card" style="width:100%">
+      <img class="card-img-top" src="media/{{ post.image }}" alt="Card image" style="width:100%">
+      <div class="card-body">
+        <p class="card-text" style="overflow: hidden; height: 100px;">{{ post.text }}</p>
+      </div>
+    </div>
+    </div>
+  </div>
+  <br>
+  <br>
+</div>
+{% endfor %}
+{% else %}
+    <p>No posts are available.</p>
+{% endif %}
+
+{% endblock %}
